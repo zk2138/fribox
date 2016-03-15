@@ -106,6 +106,18 @@ function naloziDatoteko(zahteva, odgovor) {
     });
 }
 
+function izbrisiDatoteko(odgovor, absolutnaPotDoDatoteke) {
+    odgovor.writeHead(200, {'Content-Type':'text/plain'});
+    fs.unlink(absolutnaPotDoDatoteke, function(napaka){
+        if(napaka) {
+            posredujNapako500(odgovor);
+        } else {
+            odgovor.write('Datoteka izbrisana');
+            odgovor.end();
+        }
+    });
+}
+
 
 function posredujNapako500(odgovor) {
     odgovor.writeHead(500, {'Content-Type':'text/plain'});
