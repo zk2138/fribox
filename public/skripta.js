@@ -27,6 +27,21 @@ window.addEventListener('load', function() {
 					var velikost = datoteka.velikost;
 					var enota = "B";
 					
+					if(velikost >= 1024) {
+						velikost = velikost/1024;
+						enota = "KiB";
+					}
+					if(velikost >= 1024) {
+						velikost = velikost/1024;
+						enota = "MiB";
+					}
+					if(velikost >= 1024) {
+						velikost = velikost/1024;
+						enota = "GiB";
+					}
+					
+					velikost = Math.round(velikost);
+					
 					datotekeHTML.innerHTML += " \
 						<div class='datoteka senca rob'> \
 							<div class='naziv_datoteke'> " + datoteka.datoteka + "  (" + velikost + " " + enota + ") </div> \
