@@ -43,12 +43,14 @@ function posredujStaticnoVsebino(odgovor, absolutnaPotDoDatoteke, mimeType) {
                 fs.readFile(absolutnaPotDoDatoteke, function(napaka, datotekaVsebina) {
                     if (napaka) {
                         //Posreduj napako
+                        posredujNapako404(odgovor);
                     } else {
                         posredujDatoteko(odgovor, absolutnaPotDoDatoteke, datotekaVsebina, mimeType);
                     }
                 })
             } else {
                 //Posreduj napako
+                posredujNapako404(odgovor);
             }
         })
 }
@@ -68,6 +70,7 @@ function posredujSeznamDatotek(odgovor) {
     fs.readdir(dataDir, function(napaka, datoteke) {
         if (napaka) {
             //Posreduj napako
+            posredujNapako500(odgovor);
         } else {
             var rezultat = [];
             for (var i=0; i<datoteke.length; i++) {
@@ -95,9 +98,24 @@ function naloziDatoteko(zahteva, odgovor) {
         fs.copy(zacasnaPot, dataDir + datoteka, function(napaka) {  
             if (napaka) {
                 //Posreduj napako
+                posredujNapako500(odgovor);
             } else {
                 posredujOsnovnoStran(odgovor);        
             }
         });
     });
 }
+
+
+function posredujNapako500(odgovor) {
+    odgovor.writeHead(500, {'Content-Type':'text/plain'});
+    odgovor.write('Napaka 500: Prišlo je do napake strežnika.');
+    odgovor.end();
+}
+
+function posredujNapako404(odgovor) {
+    odgovor.writeHead(404, {'Content-Type':'text/plain'});
+    odgovor.write('Napaka 404: Vira ni mogoče najti.');
+    odgovor.end();
+}
+
